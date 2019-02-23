@@ -23,6 +23,11 @@ public class PatientTableModel extends AbstractTableModel
     this.patientList = patientList;
   }
 
+  public List<Patient> getPatientList()
+  {
+    return this.patientList;
+  }
+
   public void setPatientList(List<Patient> patientList)
   {
     this.patientList = patientList;

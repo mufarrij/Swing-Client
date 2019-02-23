@@ -24,15 +24,22 @@ public class PatientRegForm extends JFrame
   /**
    * Initializing  input fields used in Patient Registration Form
    */
-  JTextField nameField1 = new JTextField("");
-  JTextField nameField2= new JTextField("");
+  JTextField nameFieldInput = new JTextField("");
+  JTextField nameFieldSearch= new JTextField("");
   JTextField phoneNumberField = new JTextField("");
   JTextArea addressTextArea = new JTextArea(3, 1);
 
 
-  // Gender Field
+  // Gender Field inputPanel
   JRadioButton genderMale = new JRadioButton("Male");
   JRadioButton genderFemale = new JRadioButton("Female");
+
+  // Gender Field searchPanel
+  JTextField birthYearField = new JTextField("");
+  ButtonGroup genderGroupSearch = new ButtonGroup();
+  JRadioButton genderMaleSearch = new JRadioButton("Male");
+  JRadioButton genderFemaleSearch = new JRadioButton("Female");
+
 
   // Date Picker
   UtilDateModel model = new UtilDateModel();
@@ -193,7 +200,7 @@ public class PatientRegForm extends JFrame
     gbc.weightx = 1;
     gbc.gridwidth = 2;
     gbc.fill = GridBagConstraints.HORIZONTAL;
-    inputPanel.add(nameField1, gbc);
+    inputPanel.add(nameFieldInput, gbc);
 
     i++;
 
@@ -287,12 +294,12 @@ public class PatientRegForm extends JFrame
 
     // Disabling save button untill all required fields are filled ( Name, BirthDay , Gender )
     save.setEnabled(false);
-    nameField1.addKeyListener(new KeyAdapter()
+    nameFieldInput.addKeyListener(new KeyAdapter()
     {
       public void keyReleased(KeyEvent e)
       {
         super.keyReleased(e);
-        if ( nameField1.getText().length() > 0 && (Date) datePicker.getModel().getValue() != null && (genderMale.isSelected() || genderFemale.isSelected() ) )
+        if ( nameFieldInput.getText().length() > 0 && (Date) datePicker.getModel().getValue() != null && (genderMale.isSelected() || genderFemale.isSelected() ) )
           //if (nameField1.getText().length() > 0  && (genderMale.isSelected() || genderFemale.isSelected()))
           save.setEnabled(true);
         else
@@ -339,7 +346,7 @@ public class PatientRegForm extends JFrame
       {
 
         // getting user inputs from textFields of inputPanel
-        String name = nameField1.getText();
+        String name = nameFieldInput.getText();
         String phoneNum = phoneNumberField.getText();
         String address = addressTextArea.getText();
 
@@ -416,12 +423,24 @@ public class PatientRegForm extends JFrame
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
 
-        nameField1.setText("");
+        nameFieldInput.setText("");
         phoneNumberField.setText("");
         addressTextArea.setText("");
         empStatusComboBox.setSelectedIndex(0);
         datePicker.getModel().setSelected(false);
         genderGroup.clearSelection();
+
+        // Clear Search Panel
+
+        nameFieldSearch.setText("");
+        birthYearField.setText("");
+        genderGroupSearch.clearSelection();
+
+        // Change table model List to patientList
+
+        tableModel.setPatientList(dataHandler.patientList);
+        PatientRegForm.refresh();
+
 
       }
     });
@@ -449,22 +468,18 @@ public class PatientRegForm extends JFrame
     // initializing labels and textFields used in search panel
     JLabel nameLabel = new JLabel("Name");
     JLabel birthYearLabel = new JLabel("BirthYear");
-    JTextField birthYearField = new JTextField("");
     JButton search = new JButton("Search");
 
 
-    // initializing Gender button group
-    ButtonGroup genderGroup = new ButtonGroup();
-    JRadioButton genderMale = new JRadioButton("Male");
-    JRadioButton genderFemale = new JRadioButton("Female");
-    genderGroup.add(genderMale);
-    genderGroup.add(genderFemale);
+    // initializing Gender button group for search panel
+    genderGroupSearch.add(genderMaleSearch);
+    genderGroupSearch.add(genderFemaleSearch);
 
     // initializing radioPanel which uses GridBagLayout to render gender radio buttons
     JPanel radioPanel = new JPanel();
     radioPanel.setLayout(new GridBagLayout());
-    fu.addMiddleField(genderFemale, radioPanel);
-    fu.addMiddleField(genderMale, radioPanel);
+    fu.addMiddleField(genderFemaleSearch, radioPanel);
+    fu.addMiddleField(genderMaleSearch, radioPanel);
 
 
     // placing the internal components of searchPanel using GridBagLayout
@@ -490,7 +505,7 @@ public class PatientRegForm extends JFrame
     gbc.weightx = 1;
     gbc.gridwidth = 1;
     gbc.fill = GridBagConstraints.HORIZONTAL;
-    searchPanel.add(nameField2, gbc);
+    searchPanel.add(nameFieldSearch, gbc);
 
     i++;
     gbc.gridx = i;
@@ -530,7 +545,7 @@ public class PatientRegForm extends JFrame
       public void actionPerformed(ActionEvent actionEvent) {
 
         // getting search params from the user input
-        String text= nameField2.getText();
+        /*String text= nameField2.getText();
         String birthYear = birthYearField.getText();
 
         Calendar cal = Calendar.getInstance();
@@ -560,7 +575,36 @@ public class PatientRegForm extends JFrame
         } else
         {
           rowSorter.setRowFilter( RowFilter.regexFilter("(?i)" + text ) );
-        }
+        }*/
+
+       // Sorting the table based on input
+
+
+       // clear existing searchdata
+       DataHandler.searchList.clear();
+
+       String nameSearch = nameFieldSearch.getText();
+       if( nameSearch.length() == 0)
+         nameSearch = "" ;
+
+       String birthYearSearch = birthYearField.getText();
+       if( birthYearSearch.length() == 0)
+         birthYearSearch = "";
+
+       String genderSearch = "";
+
+       if( genderMaleSearch.isSelected() )
+       {
+          genderSearch = "Male";
+       }
+       else if( genderFemaleSearch.isSelected())
+       {
+          genderSearch = "Female";
+       }
+
+       dataHandler.fillSearchData( nameSearch , birthYearSearch , genderSearch );
+       tableModel.setPatientList( dataHandler.searchList );
+       PatientRegForm.refresh();
 
       }
     });
@@ -674,9 +718,10 @@ public class PatientRegForm extends JFrame
         {
 
           int row = table.getSelectedRow();
-          Patient p = (Patient) dataHandler.patientList.get(row);
+          // Patient p = (Patient) dataHandler.patientList.get(row);
+          Patient p = tableModel.getPatientList().get(row);
 
-          nameField1.setText(p.getName());
+          nameFieldInput.setText(p.getName());
           phoneNumberField.setText(p.getPhoneNumber());
           addressTextArea.setText(p.getAddress());
           if( p.getGender() == "Male" )
