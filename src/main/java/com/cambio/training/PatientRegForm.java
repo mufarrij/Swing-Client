@@ -295,7 +295,7 @@ public class PatientRegForm extends JFrame
     // Disabling save button untill all required fields are filled ( Name, BirthDay , Gender )
     save.setEnabled(false);
     nameFieldInput.addKeyListener(new KeyAdapter()
-    {
+    { @Override
       public void keyReleased(KeyEvent e)
       {
         super.keyReleased(e);
@@ -309,7 +309,7 @@ public class PatientRegForm extends JFrame
 
     // Allowing  only numbers for phone number field
     phoneNumberField.addKeyListener(new KeyAdapter()
-    {
+    { @Override
       public void keyTyped(KeyEvent e)
       {
         char c = e.getKeyChar();
@@ -684,7 +684,6 @@ public class PatientRegForm extends JFrame
         {
 
           int row = table.getSelectedRow();
-          // Patient p = (Patient) dataHandler.patientList.get(row);
           Patient p = tableModel.getPatientList().get(row);
 
           nameFieldInput.setText(p.getName());
