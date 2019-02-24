@@ -42,29 +42,29 @@ public final class DataHandler {
 
   /**
    * getPatientTableModel is the getter method for get patientTableModel
-   *
    * @return patientTableModel object of dataHandler
    */
-  public PatientTableModel getPatientTableModel() {
+  public PatientTableModel getPatientTableModel()
+  {
     return patientTableModel;
   }
 
   /**
    * addPatient method takes patient object as input and add it to patientList
-   *
    * @param p takes patient object as input
    */
-  public void addPatient(Patient p) {
+  public void addPatient(Patient p)
+  {
     this.patientList.add(p);
     patientTableModel = new PatientTableModel(patientList);
   }
 
   /**
    * addSearchPatient method takes patient object as input and add it to  searchList
-   *
    * @param p takes patient object as input
    */
-  public void addSearchPatient(Patient p) {
+  public void addSearchPatient(Patient p)
+  {
     this.searchList.add(p);
     System.out.println(p.getEmpStatus());
   }
