@@ -579,8 +579,7 @@ public class PatientRegForm extends JFrame
 
        // Sorting the table based on input
 
-
-       // clear existing searchdata
+        // clear existing searchdata
        DataHandler.searchList.clear();
 
        String nameSearch = nameFieldSearch.getText();
