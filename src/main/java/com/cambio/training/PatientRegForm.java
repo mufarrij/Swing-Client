@@ -544,40 +544,7 @@ public class PatientRegForm extends JFrame
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
 
-        // getting search params from the user input
-        /*String text= nameField2.getText();
-        String birthYear = birthYearField.getText();
-
-        Calendar cal = Calendar.getInstance();
-        Date today = new Date();
-        cal.setTime(today);
-
-        int year = cal.get(Calendar.YEAR);
-        String ageString = "";
-
-        if( birthYear.length() > 0 )
-        {
-          int age = year - Integer.parseInt(birthYear);
-          ageString = Integer.toString(age);
-        }
-
-
-        if( text.trim().length() == 0 )
-        {
-          if( ageString.length() == 0 )
-          {
-            rowSorter.setRowFilter( null );
-          }
-          else
-          {
-            rowSorter.setRowFilter( RowFilter.regexFilter("(?i)" + ageString ) );
-          }
-        } else
-        {
-          rowSorter.setRowFilter( RowFilter.regexFilter("(?i)" + text ) );
-        }*/
-
-       // Sorting the table based on input
+        // Sorting the table based on input
 
         // clear existing searchdata
        DataHandler.searchList.clear();

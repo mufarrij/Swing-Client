@@ -66,7 +66,6 @@ public final class DataHandler {
   public void addSearchPatient(Patient p)
   {
     this.searchList.add(p);
-    System.out.println(p.getEmpStatus());
   }
 
   /**
